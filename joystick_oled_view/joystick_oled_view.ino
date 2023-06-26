@@ -25,6 +25,8 @@ void loop() {
   input_x = analogRead(VX_PIN); //get raw data from pins
   input_y = analogRead(VY_PIN);
   Serial.printf("\nRAW: %i, %i\n", input_x, input_y);
+  oled.println(input_x);oled.println(input_y);
+  
   //scale input from 0-4095 to 0-63 scale (screen heigth)
   input_x = input_x*64/4096;
   input_y = input_y*64/4096;
