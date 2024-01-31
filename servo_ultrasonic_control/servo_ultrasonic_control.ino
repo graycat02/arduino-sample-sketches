@@ -1,3 +1,11 @@
+/*
+ * made by graycat02
+ * 
+ * This sketch controls a servo with the input (distance) from an
+ * ultrasonic sensor. Data mapping, input pins, delay between cycles
+ * and other values can be modified easily.
+ */
+
 #include <Servo.h>
 
 // pin definition
