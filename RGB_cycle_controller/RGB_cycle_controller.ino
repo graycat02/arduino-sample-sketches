@@ -15,11 +15,13 @@
 #define DEBOUNCE_RELEASE 80
 #define COLOR_PRESET colors_minecraft
   // by changing this setting to some of the arrays' names below you can apply color schemes easily
+#define STARTUP_BLINK true
+#define DEBUG false
 
 const int pinR = 4;
-const int pinG = 3;
+const int pinG = 0;
 const int pinB = 1;
-const int buttonPin = 0;
+const int buttonPin = 2;
 
 // {R, G, B} -> (0 to 255 values)
 int colors_default[][3] = {
@@ -54,28 +56,79 @@ int currentColorIndex = 0;
 int numColors = sizeof(COLOR_PRESET) / sizeof(COLOR_PRESET[0]); // number of RGB colors (not single cells), so we divide into individual cell size
 
 void setup() {
-    pinMode(pinR, OUTPUT);
-    pinMode(pinG, OUTPUT);
-    pinMode(pinB, OUTPUT);
-    pinMode(buttonPin, INPUT); // I use a pull-down resistor, not the internal pull-up of the chip
-
-    setColor(colors[currentColorIndex]);
+  pinMode(pinR, OUTPUT); // Red
+  pinMode(pinG, OUTPUT); // Green
+  pinMode(pinB, OUTPUT); // Blue
+  pinMode(buttonPin, INPUT); // I use a pull-down resistor, not the internal pull-up of the chip
+  
+  if(DEBUG){
+    // color channels check
+    setColor(colors_default[1]);
+    delay(300);
+    setColor(colors_default[2]);
+    delay(300);
+    setColor(colors_default[3]);
+    delay(300);
+  
+    // fade to check PWM on all channels
+    setColor(colors_default[0]); // off
+    // red
+    for (int i = 0; i <= 255; i++) {
+      analogWrite(pinR, i);
+      delay(10);
+    }
+    delay(500);
+    analogWrite(pinR, 0);
+    delay(500);
+  
+    // green
+    for (int i = 0; i <= 255; i++) {
+      analogWrite(pinG, i);
+      delay(10);
+    }
+    delay(500);
+    analogWrite(pinG, 0);
+    delay(500);  
+  
+    // blue
+    for (int i = 0; i <= 255; i++) {
+      analogWrite(pinB, i);
+      delay(10);
+    }
+    delay(500);
+    analogWrite(pinB, 0);
+    delay(500);
+  }
+  
+  // startup blink
+  if(STARTUP_BLINK){
+    analogWrite(pinG, 255);
+    delay(100);
+    analogWrite(pinG, 0);
+    delay(100);
+    analogWrite(pinB, 255);
+    delay(100);
+    analogWrite(pinB, 0);
+    delay(100);
+  }
+  
+  setColor(COLOR_PRESET[currentColorIndex]);
 }
 
 void loop() {
-    if (digitalRead(buttonPin) == HIGH) {
-        delay(DEBOUNCE_PRESS);
+  if (digitalRead(buttonPin) == LOW) {
+    delay(DEBOUNCE_PRESS);
 
-        while (digitalRead(buttonPin) == HIGH) {}
-        delay(DEBOUNCE_RELEASE);
+    while (digitalRead(buttonPin) == LOW) {}
+    delay(DEBOUNCE_RELEASE);
 
-        currentColorIndex = (currentColorIndex + 1) % numColors; // return to 0 if end has been reached
-        setColor(colors[currentColorIndex]);
-    }
+    currentColorIndex = (currentColorIndex + 1) % numColors; // return to 0 if end has been reached
+    setColor(COLOR_PRESET[currentColorIndex]);
+  }
 }
 
 void setColor(int color[3]) {
-    analogWrite(pinR, color[0]);
-    analogWrite(pinG, color[1]);
-    analogWrite(pinB, color[2]);
+  analogWrite(pinR, color[0]);
+  analogWrite(pinG, color[1]);
+  analogWrite(pinB, color[2]);
 }
