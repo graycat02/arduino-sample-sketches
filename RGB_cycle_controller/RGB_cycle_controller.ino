@@ -13,6 +13,8 @@
  
 #define DEBOUNCE_PRESS 80
 #define DEBOUNCE_RELEASE 80
+#define COLOR_PRESET colors_minecraft
+  // by changing this setting to some of the arrays' names below you can apply color schemes easily
 
 const int pinR = 4;
 const int pinG = 3;
@@ -20,19 +22,36 @@ const int pinB = 1;
 const int buttonPin = 0;
 
 // {R, G, B} -> (0 to 255 values)
-int colors[][3] = {
-    {0, 0, 0}, // off
-    {255, 0, 0},
-    {0, 255, 0},
-    {0, 0, 255},
-    {255, 255, 0},
-    {0, 255, 255},
-    {255, 0, 255},
-    {255, 255, 255}
+int colors_default[][3] = {
+  {0, 0, 0}, // off
+  {255, 0, 0},
+  {0, 255, 0},
+  {0, 0, 255},
+  {255, 255, 0},
+  {0, 255, 255},
+  {255, 0, 255},
+  {255, 255, 255}
+};
+int colors_minecraft[][3] = {
+  /* the combinations below are manually calibrated for my personal build, including the
+   * resistors combinations, leds, and other physical components. for example, red lights
+   * has less power than green or blue, so the values are higher
+   */
+  {0, 0, 0}, // off
+  {231, 22, 3}, // iron
+  {226, 20, 0}, // gold
+  {15, 185, 81}, // diamond
+  {2, 248, 2}, // emerald
+  {250, 0, 0}, // redstone
+  {242, 7, 1}, // copper
+  {2, 4, 147}, // lapislazuli
+  {231, 12, 36}, // amethyst
+  {225, 68, 20}, // quartz
+  {236, 7, 0}, /// orange
 };
 
 int currentColorIndex = 0;
-int numColors = sizeof(colors) / sizeof(colors[0]); // number of RGB colors (not single cells), so we divide into individual cell size
+int numColors = sizeof(COLOR_PRESET) / sizeof(COLOR_PRESET[0]); // number of RGB colors (not single cells), so we divide into individual cell size
 
 void setup() {
     pinMode(pinR, OUTPUT);
