@@ -116,10 +116,10 @@ void setup() {
 }
 
 void loop() {
-  if (digitalRead(buttonPin) == LOW) {
+  if (digitalRead(buttonPin) == HIGH) {
     delay(DEBOUNCE_PRESS);
 
-    while (digitalRead(buttonPin) == LOW) {}
+    while (digitalRead(buttonPin) == HIGH) {}
     delay(DEBOUNCE_RELEASE);
 
     currentColorIndex = (currentColorIndex + 1) % numColors; // return to 0 if end has been reached
